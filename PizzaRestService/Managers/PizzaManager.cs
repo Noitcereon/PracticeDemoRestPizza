@@ -32,21 +32,23 @@ namespace PizzaRestService.Managers
         public String Post(Pizza newPizza)
         {
             Pizzas.Add(newPizza);
-
             return $"{ newPizza } added.";
         }
 
-        public String Put(Pizza newPizza, int number)
+        public String Put(Pizza updatedPizza, int number)
         {
-            Pizza oldPizza = GetOne(number);
+            var oldPizza = Pizzas.First(x => x.Number == number);
+            oldPizza.Description = updatedPizza.Description;
+            oldPizza.FamilySize = updatedPizza.FamilySize;
+            oldPizza.Price = updatedPizza.Price;
 
-
-            return $"Updated {oldPizza} to be {newPizza}";
+            return $"Updated {oldPizza} to be {updatedPizza}";
         }
 
         public String Delete(int number)
         {
             Pizza pizzaToDelete = GetOne(number);
+            Pizzas.Remove(pizzaToDelete);
 
             return $"Deleted pizza: {pizzaToDelete}";
         }

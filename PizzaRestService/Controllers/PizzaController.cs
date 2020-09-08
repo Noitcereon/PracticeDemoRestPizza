@@ -9,15 +9,41 @@ using PracticePizzaLib;
 namespace PizzaRestService.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/[controller]")]
     public class PizzaController : ControllerBase
     {
-        private PizzaManager _manager = new PizzaManager();
+        private readonly PizzaManager _manager = new PizzaManager();
 
         [HttpGet]
         public IList<Pizza> Get()
         {
             return _manager.GetAll();
+        }
+
+        [HttpGet]
+        [Route("{number}")]
+        public Pizza GetOne(int number)
+        {
+            return _manager.GetOne(number);
+        }
+
+        [HttpPost]
+        public String Post(Pizza newPizza)
+        {
+            return _manager.Post(newPizza);
+        }
+        [HttpPut]
+        [Route("{number}")]
+        public String Put(Pizza updatedPizza, int number)
+        {
+            return _manager.Put(updatedPizza, number);
+        }
+
+        [HttpDelete]
+        [Route("{number}")]
+        public String Delete(int number)
+        {
+            return _manager.Delete(number);
         }
     }
 }
