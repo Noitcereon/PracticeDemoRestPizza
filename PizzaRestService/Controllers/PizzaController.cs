@@ -28,7 +28,7 @@ namespace PizzaRestService.Controllers
         }
 
         [HttpPost]
-        public String Post(Pizza newPizza)
+        public String Post([FromBody]Pizza newPizza)
         {
             return _manager.Post(newPizza);
         }

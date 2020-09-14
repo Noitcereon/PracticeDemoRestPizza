@@ -11,6 +11,11 @@ namespace PracticePizzaLib
         private bool _familySize;
         private decimal _price;
 
+        public Pizza()
+        {
+
+        }
+
         public Pizza(int number, String description, bool familySize, decimal price)
         {
             _number = number;
