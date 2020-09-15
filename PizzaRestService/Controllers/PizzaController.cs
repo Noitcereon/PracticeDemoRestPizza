@@ -9,7 +9,7 @@ using PracticePizzaLib;
 namespace PizzaRestService.Controllers
 {
     [ApiController]
-    [Route("/[controller]")]
+    [Route("api/localPizzas/")]
     public class PizzaController : ControllerBase
     {
         private readonly PizzaManager _manager = new PizzaManager();

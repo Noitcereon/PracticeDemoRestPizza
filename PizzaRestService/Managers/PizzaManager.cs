@@ -42,7 +42,7 @@ namespace PizzaRestService.Managers
             oldPizza.FamilySize = updatedPizza.FamilySize;
             oldPizza.Price = updatedPizza.Price;
 
-            return $"Updated {oldPizza} to be {updatedPizza}";
+            return $"Updated pizza Nr. {updatedPizza.Number}";
         }
 
         public String Delete(int number)
