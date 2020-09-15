@@ -9,7 +9,7 @@ using PracticeRestService.Managers;
 namespace PracticeRestService.Controllers
 {
      [ApiController]
-     [Route("api/Items/")]
+     [Route("api/localItems/")]
     public class ItemsController : ControllerBase
     {
         private readonly ItemManager _manager = new ItemManager();
@@ -22,15 +22,28 @@ namespace PracticeRestService.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public Item GetOne(int number)
+        public Item GetOne(int id)
         {
-            return _manager.GetOne(number);
+            return _manager.GetOne(id);
         }
         [HttpGet]
         [Route("Name/{substring}")]
-        public IEnumerable<Item> GetFromSubstring(string substring)
+        public IEnumerable<Item> GetByNameSubstring(string substring)
         {
-            return _manager.GetFromSubstring(substring);
+            return _manager.GetByNameSubstring(substring);
+        }
+        [HttpGet]
+        [Route("Quality/{substring}")]
+        public IEnumerable<Item> GetByQualitySubstring(string substring)
+        {
+            return _manager.GetByQualitySubstring(substring);
+        }
+
+        [HttpGet]
+        [Route("[search]")]
+        public IEnumerable<Item> GetWithFilter([FromQuery] FilterItem filter)
+        {
+            return _manager.GetWithFilter(filter);
         }
 
         [HttpPost]
@@ -39,17 +52,17 @@ namespace PracticeRestService.Controllers
             return _manager.Post(newItem);
         }
         [HttpPut]
-        [Route("{number}")]
-        public String Put(Item updatedItem, int number)
+        [Route("{id}")]
+        public String Put(Item updatedItem, int id)
         {
-            return _manager.Put(updatedItem, number);
+            return _manager.Put(updatedItem, id);
         }
 
         [HttpDelete]
-        [Route("{number}")]
-        public String Delete(int number)
+        [Route("{id}")]
+        public String Delete(int id)
         {
-            return _manager.Delete(number);
+            return _manager.Delete(id);
         }
     }
 }

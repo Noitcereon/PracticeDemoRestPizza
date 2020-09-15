@@ -17,7 +17,7 @@ namespace PracticeRestService.Managers
             new Item(4, "Pork", "Medium", (decimal)30.95),
             new Item(5, "Beef", "High", (decimal)69.95),
             new Item(6, "Milk", "High", (decimal)9.95),
-            new Item(7, "Cheesecake", "Medium,", (decimal)19.95)
+            new Item(7, "Cheesecake", "Medium", (decimal)19.95)
         };
 
         public IList<Item> GetAll()
@@ -29,9 +29,20 @@ namespace PracticeRestService.Managers
             return Items.Find((item) => item.Id == id);
         }
 
-        public IEnumerable<Item> GetFromSubstring(string substring)
+        public IEnumerable<Item> GetByNameSubstring(string substring)
         {
             return Items.FindAll(x => x.Name.ToLower().Contains(substring.ToLower()));
+        }
+
+        public IEnumerable<Item> GetByQualitySubstring(string substring)
+        {
+            return Items.FindAll(x => x.Quality.ToLower().Contains(substring.ToLower()));
+        }
+
+        public IEnumerable<Item> GetWithFilter(FilterItem filter)
+        {
+            throw new NotImplementedException();
+            // code that filters according to the values in filter.
         }
 
         public String Post(Item newItem)
