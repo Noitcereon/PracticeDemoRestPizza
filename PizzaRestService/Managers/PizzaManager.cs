@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO.Enumeration;
 using System.Linq;
-using System.Threading.Tasks;
-using PracticePizzaLib;
+using Microsoft.AspNetCore.Mvc;
+using PracticeRestLib;
 
-namespace PizzaRestService.Managers
+namespace PracticeRestService.Managers
 {
     public class PizzaManager
     {
@@ -27,6 +26,11 @@ namespace PizzaRestService.Managers
         public Pizza GetOne(int number)
         {
             return Pizzas.Find((pizza) => pizza.Number == number);
+        }
+
+        public IEnumerable<Pizza> GetFromSubstring(string substring)
+        {
+            return Pizzas.FindAll(x => x.Description.ToLower().Contains(substring));
         }
 
         public String Post(Pizza newPizza)

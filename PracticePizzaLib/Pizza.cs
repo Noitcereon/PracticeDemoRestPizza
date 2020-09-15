@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PracticePizzaLib
+namespace PracticeRestLib
 {
     public class Pizza
     {

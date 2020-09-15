@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PizzaRestService.Managers;
-using PracticePizzaLib;
+using PracticeRestLib;
+using PracticeRestService.Managers;
 
-namespace PizzaRestService.Controllers
+namespace PracticeRestService.Controllers
 {
     [ApiController]
     [Route("api/localPizzas/")]
-    public class PizzaController : ControllerBase
+    public class PizzasController : ControllerBase
     {
         private readonly PizzaManager _manager = new PizzaManager();
 
@@ -25,6 +23,12 @@ namespace PizzaRestService.Controllers
         public Pizza GetOne(int number)
         {
             return _manager.GetOne(number);
+        }
+        [HttpGet]
+        [Route("description/{substring}")]
+        public IEnumerable<Pizza> GetFromSubstring(string substring)
+        {
+            return _manager.GetFromSubstring(substring.ToLower());
         }
 
         [HttpPost]
