@@ -11,13 +11,13 @@ namespace PracticeRestService.Managers
     {
         private static readonly List<Item> Items = new List<Item>
         {
-            new Item(1, "Cheese", "High",(decimal)(55.5)),
-            new Item(2, "Sausage", "Medium",(decimal)(35.5)),
-            new Item(3, "Bun", "Low", (decimal)9.95),
-            new Item(4, "Pork", "Medium", (decimal)30.95),
-            new Item(5, "Beef", "High", (decimal)69.95),
-            new Item(6, "Milk", "High", (decimal)9.95),
-            new Item(7, "Cheesecake", "Medium", (decimal)19.95)
+            new Item(1, "Cheese", "High",55.5),
+            new Item(2, "Sausage", "Medium",35.5),
+            new Item(3, "Bun", "Low", 9.95),
+            new Item(4, "Pork", "Medium", 30.95),
+            new Item(5, "Beef", "High", 69.95),
+            new Item(6, "Milk", "High", 9.95),
+            new Item(7, "Cheesecake", "Medium", 19.95)
         };
 
         public IList<Item> GetAll()

@@ -9,11 +9,11 @@ namespace PracticeRestLib
         private int _id;
         private string _name;
         private string _quality;
-        private decimal _price;
+        private double _price;
 
         public Item() { }
 
-        public Item(int id, string name, string quality, decimal price)
+        public Item(int id, string name, string quality, double price)
         {
             Id = id;
             Name = name;
@@ -39,7 +39,7 @@ namespace PracticeRestLib
             set => _quality = value;
         }
 
-        public decimal Price
+        public double Price
         {
             get => _price;
             set => _price = value;

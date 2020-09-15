@@ -8,5 +8,13 @@ namespace PracticeRestLib
     {
         public double HighCost { get; set; }
         public double LowCost { get; set; }
+
+        public FilterItem() { }
+
+        public FilterItem(double highCost, double lowCost)
+        {
+            HighCost = highCost;
+            LowCost = lowCost;
+        }
     }
 }
