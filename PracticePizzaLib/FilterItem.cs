@@ -6,15 +6,15 @@ namespace PracticeRestLib
 {
     public class FilterItem
     {
-        public double HighCost { get; set; }
         public double LowCost { get; set; }
+        public double HighCost { get; set; }
 
         public FilterItem() { }
 
-        public FilterItem(double highCost, double lowCost)
+        public FilterItem(double lowCost, double highCost)
         {
-            HighCost = highCost;
             LowCost = lowCost;
+            HighCost = highCost;
         }
     }
 }

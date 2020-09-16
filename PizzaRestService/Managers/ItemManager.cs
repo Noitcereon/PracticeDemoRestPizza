@@ -41,8 +41,23 @@ namespace PracticeRestService.Managers
 
         public IEnumerable<Item> GetWithFilter(FilterItem filter)
         {
-            throw new NotImplementedException();
-            // code that filters according to the values in filter.
+            List<Item> filteredList = new List<Item>();
+
+            // TODO: Refactor
+            if (filter.HighCost > 0 && filter.LowCost > 0)
+            {
+                filteredList = Items.FindAll((x) => x.Price <= filter.HighCost && x.Price >= filter.LowCost);
+            }                                                                                                                                                                               
+            else if (filter.HighCost > 0 && filter.LowCost == 0)
+            {
+                filteredList = Items.FindAll(x => x.Price <= filter.HighCost);
+            }
+            else if (filter.HighCost == 0 && filter.LowCost > 0)
+            {
+                filteredList = Items.FindAll(x => x.Price >= filter.LowCost);
+            }
+
+            return filteredList;
         }
 
         public String Post(Item newItem)

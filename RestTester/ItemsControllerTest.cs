@@ -11,7 +11,7 @@ namespace RestTester
     [TestClass]
     public class ItemsControllerTest
     {
-        private static readonly ItemManager Manager;
+        private static readonly ItemManager Manager = new ItemManager();
         private static readonly List<Item> Items = new List<Item>
         {
             new Item(1, "Cheese", "High",55.5),
@@ -32,9 +32,10 @@ namespace RestTester
 
             FilterItem filter = new FilterItem(5, 50);
 
-            List<Item> expected = Items.FindAll(x => x.Price <= 50 && x.Price >= 5);
+            List<Item> expected = Items.FindAll(x => x.Price <= filter.HighCost && x.Price >= filter.LowCost);
             List<Item> actual = new List<Item>(Manager.GetWithFilter(filter));
-
+            
+            // this throws an error for some reason.
             CollectionAssert.AreEquivalent(expected, actual);
         }
     }

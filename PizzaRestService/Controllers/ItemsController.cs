@@ -40,7 +40,7 @@ namespace PracticeRestService.Controllers
         }
 
         [HttpGet]
-        [Route("[search]")]
+        [Route("search")]
         public IEnumerable<Item> GetWithFilter([FromQuery] FilterItem filter)
         {
             return _manager.GetWithFilter(filter);
