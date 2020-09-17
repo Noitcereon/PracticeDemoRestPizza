@@ -43,7 +43,7 @@ namespace PracticeRestService.Controllers
                 return Ok(_manager.GetOne(id));
             }
 
-            return NotFound($"Item not with id '{id}' not found.");
+            return NotFound($"Item with id {id} does not exist.");
         }
         [HttpGet]
         [Route("Name/{substring}")]
