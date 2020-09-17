@@ -19,6 +19,8 @@ namespace PracticeRestService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +39,8 @@ namespace PracticeRestService
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors(options => options.AllowAnyHeader().AllowAnyOrigin().WithMethods("GET", "POST"));
         }
     }
 }
