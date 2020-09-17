@@ -16,9 +16,20 @@ namespace PracticeRestService.Controllers
         private readonly ItemManager _manager = new ItemManager();
 
         [HttpGet]
-        public IList<Item> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Get()
         {
-            return _manager.GetAll();
+            if (_manager.GetAll() == null)
+            {
+                return NotFound("No itemlist found.");
+            }
+            if (_manager.GetAll().Count > 0)
+            {
+                return Ok(_manager.GetAll());
+            }
+
+            return NotFound("List of items is empty.");
         }
 
         [HttpGet]
@@ -74,7 +85,7 @@ namespace PracticeRestService.Controllers
         {
             if (_manager.GetOne(id) != null)
             {
-                return Ok( _manager.Delete(id));
+                return Ok(_manager.Delete(id));
             }
 
             return NotFound("Cannot delete a value that does not exist.");
