@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracticeRestLib;
 using PracticeRestService.Managers;
 
 namespace PracticeRestService.Controllers
 {
-     [ApiController]
-     [Route("api/localItems/")]
+    [ApiController]
+    [Route("api/localItems/")]
     public class ItemsController : ControllerBase
     {
         private readonly ItemManager _manager = new ItemManager();
@@ -22,9 +23,16 @@ namespace PracticeRestService.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public Item GetOne(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetOne(int id)
         {
-            return _manager.GetOne(id);
+            if (_manager.GetOne(id) != null)
+            {
+                return Ok(_manager.GetOne(id));
+            }
+
+            return NotFound($"Item not with id '{id}' not found.");
         }
         [HttpGet]
         [Route("Name/{substring}")]
@@ -60,9 +68,16 @@ namespace PracticeRestService.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public String Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Delete(int id)
         {
-            return _manager.Delete(id);
+            if (_manager.GetOne(id) != null)
+            {
+                return Ok( _manager.Delete(id));
+            }
+
+            return NotFound("Cannot delete a value that does not exist.");
         }
     }
 }
