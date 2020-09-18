@@ -26,16 +26,26 @@ namespace RestTester
         [TestMethod]
         public void GetWithFilterTest()
         {
-            // get x values (above threshold)
-            // get x values (below threshold)
             // get x values (between two thresholds)
-
             FilterItem filter = new FilterItem(5, 50);
-
             List<Item> expected = Items.FindAll(x => x.Price <= 50 && x.Price >= 5);
             List<Item> actual = new List<Item>(Manager.GetWithFilter(filter));
-
             CollectionAssert.AreEquivalent(expected, actual);
+
+            // get x values (below threshold)
+            filter.HighCost = 0;
+            expected = Items.FindAll(x => x.Price > filter.LowCost);
+            actual = new List<Item>(Manager.GetWithFilter(filter));
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            // get nothing, since both filters are 0.
+            filter.LowCost = 0;
+             
+
+            // get x values (above threshold)
+            filter.HighCost = 40;
+
+
         }
     }
 }
