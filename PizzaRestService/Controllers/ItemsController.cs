@@ -2,29 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PracticeRestLib;
 using PracticeRestService.Managers;
 
 namespace PracticeRestService.Controllers
 {
-     [ApiController]
-     [Route("api/localItems/")]
+    [ApiController]
+    [Route("api/localItems/")]
     public class ItemsController : ControllerBase
     {
         private readonly ItemManager _manager = new ItemManager();
 
         [HttpGet]
-        public IList<Item> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Get()
         {
-            return _manager.GetAll();
+            if (_manager.GetAll() == null)
+            {
+                return NotFound("No itemlist found.");
+            }
+            if (_manager.GetAll().Count > 0)
+            {
+                return Ok(_manager.GetAll());
+            }
+
+            return NotFound("List of items is empty.");
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Item GetOne(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetOne(int id)
         {
-            return _manager.GetOne(id);
+            if (_manager.GetOne(id) != null)
+            {
+                return Ok(_manager.GetOne(id));
+            }
+
+            return NotFound($"Item with id {id} does not exist.");
         }
         [HttpGet]
         [Route("Name/{substring}")]
@@ -40,7 +59,7 @@ namespace PracticeRestService.Controllers
         }
 
         [HttpGet]
-        [Route("[search]")]
+        [Route("search")]
         public IEnumerable<Item> GetWithFilter([FromQuery] FilterItem filter)
         {
             return _manager.GetWithFilter(filter);
@@ -60,9 +79,16 @@ namespace PracticeRestService.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public String Delete(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Delete(int id)
         {
-            return _manager.Delete(id);
+            if (_manager.GetOne(id) != null)
+            {
+                return Ok(_manager.Delete(id));
+            }
+
+            return NotFound("Cannot delete a value that does not exist.");
         }
     }
 }
