@@ -11,7 +11,7 @@ namespace RestTester
     [TestClass]
     public class ItemsControllerTest
     {
-        private static readonly ItemManager Manager = new ItemManager();
+        private static readonly ItemManager Manager;
         private static readonly List<Item> Items = new List<Item>
         {
             new Item(1, "Cheese", "High",55.5),
@@ -26,17 +26,26 @@ namespace RestTester
         [TestMethod]
         public void GetWithFilterTest()
         {
-            // get x values (above threshold)
-            // get x values (below threshold)
             // get x values (between two thresholds)
-
             FilterItem filter = new FilterItem(5, 50);
-
-            List<Item> expected = Items.FindAll(x => x.Price <= filter.HighCost && x.Price >= filter.LowCost);
+            List<Item> expected = Items.FindAll(x => x.Price <= 50 && x.Price >= 5);
             List<Item> actual = new List<Item>(Manager.GetWithFilter(filter));
-            
-            // this throws an error for some reason.
             CollectionAssert.AreEquivalent(expected, actual);
+
+            // get x values (below threshold)
+            filter.HighCost = 0;
+            expected = Items.FindAll(x => x.Price > filter.LowCost);
+            actual = new List<Item>(Manager.GetWithFilter(filter));
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            // get nothing, since both filters are 0.
+            filter.LowCost = 0;
+             
+
+            // get x values (above threshold)
+            filter.HighCost = 40;
+
+
         }
     }
 }
