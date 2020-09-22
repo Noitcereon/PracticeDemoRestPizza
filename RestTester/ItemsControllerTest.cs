@@ -11,7 +11,7 @@ namespace RestTester
     [TestClass]
     public class ItemsControllerTest
     {
-        private static readonly ItemManager Manager;
+        private ItemManager _manager;
         private static readonly List<Item> Items = new List<Item>
         {
             new Item(1, "Cheese", "High",55.5),
@@ -23,19 +23,30 @@ namespace RestTester
             new Item(7, "Cheesecake", "Medium", 19.95)
         };
 
+        [TestInitialize]
+        public void BeforeEachTest()
+        {
+            _manager = new ItemManager();
+        }
+        [TestCleanup]
+        public void AfterEachTest()
+        {
+            _manager = new ItemManager();
+        }
+
         [TestMethod]
         public void GetWithFilterTest()
         {
             // get x values (between two thresholds)
             FilterItem filter = new FilterItem(5, 50);
             List<Item> expected = Items.FindAll(x => x.Price <= 50 && x.Price >= 5);
-            List<Item> actual = new List<Item>(Manager.GetWithFilter(filter));
+            List<Item> actual = new List<Item>(_manager.GetWithFilter(filter));
             CollectionAssert.AreEquivalent(expected, actual);
 
             // get x values (below threshold)
             filter.HighCost = 0;
             expected = Items.FindAll(x => x.Price > filter.LowCost);
-            actual = new List<Item>(Manager.GetWithFilter(filter));
+            actual = new List<Item>(_manager.GetWithFilter(filter));
             CollectionAssert.AreEquivalent(expected, actual);
 
             // get nothing, since both filters are 0.
@@ -45,7 +56,40 @@ namespace RestTester
             // get x values (above threshold)
             filter.HighCost = 40;
 
+        }
 
+        [TestMethod]
+        public void GetAllTest()
+        {
+            Assert.AreEqual(7, _manager.GetAll().Count);
+        }
+        [TestMethod]
+        public void GetOneTest()
+        {
+            Assert.AreEqual(Items.Find(x => x.Id == 2).Id,
+                            _manager.GetOne(2).Id);
+        }
+        [TestMethod]
+        public void PostTest()
+        {
+            int itemCountBeforePost = _manager.GetAll().Count;
+            _manager.Post(new Item(8, "someName", "Low", 4.99));
+            Assert.AreEqual(itemCountBeforePost +1, _manager.GetAll().Count);
+        }
+        [TestMethod]
+        public void PutTest()
+        {
+            Item updatedItem = new Item(1, "CrazyItem", "Medium", 50);
+            _manager.Put(updatedItem, 1);
+
+            Assert.AreEqual(updatedItem.Name, _manager.GetOne(1).Name);
+        }
+        [TestMethod]
+        public void DeleteTest()
+        {
+            int itemCountBeforeDelete = _manager.GetAll().Count;
+            _manager.Delete(1);
+            Assert.AreEqual(itemCountBeforeDelete -1, _manager.GetAll().Count);
         }
     }
 }

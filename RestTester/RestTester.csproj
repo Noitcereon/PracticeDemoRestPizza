@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PizzaRestService\PracticeRestService.csproj" />
+    <ProjectReference Include="..\PracticePizzaLib\PracticeRestLib.csproj" />
   </ItemGroup>
 
 </Project>
