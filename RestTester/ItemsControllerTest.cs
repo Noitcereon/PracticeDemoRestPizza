@@ -43,7 +43,7 @@ namespace RestTester
             List<Item> actual = new List<Item>(_manager.GetWithFilter(filter));
             CollectionAssert.AreEquivalent(expected, actual);
 
-            // get x values (below threshold)
+            // get x values (above threshold)
             filter.HighCost = 0;
             expected = Items.FindAll(x => x.Price > filter.LowCost);
             actual = new List<Item>(_manager.GetWithFilter(filter));
@@ -53,7 +53,7 @@ namespace RestTester
             filter.LowCost = 0;
              
 
-            // get x values (above threshold)
+            // get x values (below threshold)
             filter.HighCost = 40;
 
         }
