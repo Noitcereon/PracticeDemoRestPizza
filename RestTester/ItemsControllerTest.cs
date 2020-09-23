@@ -28,11 +28,6 @@ namespace RestTester
         {
             _manager = new ItemManager();
         }
-        [TestCleanup]
-        public void AfterEachTest()
-        {
-            _manager = new ItemManager();
-        }
 
         [TestMethod]
         public void GetWithFilterTest()
