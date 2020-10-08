@@ -18,15 +18,17 @@ namespace PracticeRestService.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
-            if (_manager.GetAll() == null)
+            IList<Item> items = _manager.GetAll();
+
+            if (items == null)
             {
                 return NotFound("No itemlist found.");
             }
-            if (_manager.GetAll().Count > 0)
+            if (items.Count > 0)
             {
-                return Ok(_manager.GetAll());
+                return Ok(items);
             }
 
             return NotFound("List of items is empty.");
