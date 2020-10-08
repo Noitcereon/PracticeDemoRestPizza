@@ -13,5 +13,9 @@
     <ProjectReference Include="..\PracticePizzaLib\PracticeRestLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 
 </Project>
