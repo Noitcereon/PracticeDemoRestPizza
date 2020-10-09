@@ -96,12 +96,16 @@ namespace PracticeRestService.Managers
 
         public String Post(Item newItem)
         {
+            // TODO: Rework to database
+
             _items.Add(newItem);
             return $"{ newItem } added.";
         }
 
         public String Put(Item updatedItem, int id)
         {
+            // TODO: Rework to database
+
             var oldItem = _items.First(x => x.Id == id);
             oldItem.Name = updatedItem.Name;
             oldItem.Quality = updatedItem.Quality;
@@ -112,6 +116,7 @@ namespace PracticeRestService.Managers
 
         public String Delete(int id)
         {
+            // TODO: Rework to database
             Item itemToDelete = GetOne(id);
             _items.Remove(itemToDelete);
 
