@@ -101,7 +101,7 @@ namespace PracticeRestService.Managers
         {
             try
             {
-                string sqlQuery = "INSERT INTO Item (Name, Quality, Price)" +
+                string sqlQuery = "INSERT INTO Items (name, quality, price)" +
                                   "VALUES (@itemName, @itemQuality, @itemPrice)";
                 using SqlConnection dbLink = new SqlConnection(ConnectionString);
                 using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
