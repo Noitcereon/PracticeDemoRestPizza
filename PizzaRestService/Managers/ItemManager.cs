@@ -11,16 +11,16 @@ namespace PracticeRestService.Managers
     public class ItemManager
     {
         private const string ConnectionString =
-            @"Data Source=(localdb)\MSSQLLocalDB;
-            Initial Catalog=ItemDB;Integrated Security=True;Connect Timeout=30;
-            Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
+            @"Data Source=zealandserver.database.windows.net;Initial Catalog = replaceableDB;
+            User ID = zealandserver; Password=iEIPpEfRh#;Connect Timeout = 30;
+            Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
             MultiSubnetFailover=False";
 
         private List<Item> _items = new List<Item>();
 
         public IList<Item> GetAll()
         {
-            const string sqlQuery = "SELECT * FROM Item";
+            const string sqlQuery = "SELECT * FROM Items";
             using (SqlConnection dbLink = new SqlConnection(ConnectionString))
             {
                 using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
@@ -40,7 +40,7 @@ namespace PracticeRestService.Managers
         public Item GetOne(int id)
         {
             Item itemWithSpecifiedId = new Item();
-            const string sqlQuery = "SELECT * FROM Item WHERE Id = @ItemId";
+            const string sqlQuery = "SELECT * FROM Items WHERE id = @ItemId";
             using (SqlConnection dbLink = new SqlConnection(ConnectionString))
             {
                 using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
