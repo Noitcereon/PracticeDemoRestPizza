@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PracticeRestLib;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace PracticeRestService.Managers
 {
@@ -76,6 +78,7 @@ namespace PracticeRestService.Managers
         public IEnumerable<Item> GetWithFilter(FilterItem filter)
         {
             List<Item> filteredList = new List<Item>();
+            _items = new List<Item>(GetAll());
 
             // TODO: Refactor
             if (filter.HighCost > 0 && filter.LowCost > 0)
@@ -96,16 +99,30 @@ namespace PracticeRestService.Managers
 
         public String Post(Item newItem)
         {
-            // TODO: Rework to database
+            try
+            {
+                string sqlQuery = "INSERT INTO Item (Name, Quality, Price)" +
+                                  "VALUES (@itemName, @itemQuality, @itemPrice)";
+                using SqlConnection dbLink = new SqlConnection(ConnectionString);
+                using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
+                cmd.Parameters.AddWithValue(@"itemName", newItem.Name);
+                cmd.Parameters.AddWithValue(@"itemQuality", newItem.Quality);
+                cmd.Parameters.AddWithValue(@"itemPrice", newItem.Price);
+                dbLink.Open();
+                cmd.ExecuteNonQuery();
+                dbLink.Close();
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
 
-            _items.Add(newItem);
+            //_items.Add(newItem);
             return $"{ newItem } added.";
         }
 
         public String Put(Item updatedItem, int id)
         {
-            // TODO: Rework to database
-
             var oldItem = _items.First(x => x.Id == id);
             oldItem.Name = updatedItem.Name;
             oldItem.Quality = updatedItem.Quality;
@@ -116,7 +133,6 @@ namespace PracticeRestService.Managers
 
         public String Delete(int id)
         {
-            // TODO: Rework to database
             Item itemToDelete = GetOne(id);
             _items.Remove(itemToDelete);
 
