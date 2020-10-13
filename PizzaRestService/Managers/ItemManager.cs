@@ -18,10 +18,11 @@ namespace PracticeRestService.Managers
             Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;
             MultiSubnetFailover=False";
 
-        private List<Item> _items = new List<Item>();
 
         public IList<Item> GetAll()
         {
+            List<Item> items = new List<Item>();
+
             const string sqlQuery = "SELECT * FROM Items";
             using (SqlConnection dbLink = new SqlConnection(ConnectionString))
             {
@@ -30,13 +31,13 @@ namespace PracticeRestService.Managers
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    _items.Add(ReadNextItem(reader));
+                    items.Add(ReadNextItem(reader));
                 }
                 reader.Close();
                 dbLink.Close();
             }
 
-            return _items;
+            return items;
         }
 
         public Item GetOne(int id)
@@ -63,35 +64,36 @@ namespace PracticeRestService.Managers
 
         public IEnumerable<Item> GetByNameSubstring(string substring)
         {
-            _items = new List<Item>(GetAll());
+            List<Item> items = new List<Item>();
+            items = new List<Item>(GetAll());
 
-            return _items.FindAll(x => x.Name.ToLower().Contains(substring.ToLower()));
+            return items.FindAll(x => x.Name.ToLower().Contains(substring.ToLower()));
         }
 
         public IEnumerable<Item> GetByQualitySubstring(string substring)
         {
-            _items = new List<Item>(GetAll());
+            List<Item> items = new List<Item>(GetAll());
 
-            return _items.FindAll(x => x.Quality.ToLower().Contains(substring.ToLower()));
+            return items.FindAll(x => x.Quality.ToLower().Contains(substring.ToLower()));
         }
 
         public IEnumerable<Item> GetWithFilter(FilterItem filter)
         {
             List<Item> filteredList = new List<Item>();
-            _items = new List<Item>(GetAll());
+            List<Item> items = new List<Item>(GetAll());
 
             // TODO: Refactor
             if (filter.HighCost > 0 && filter.LowCost > 0)
             {
-                filteredList = _items.FindAll((x) => x.Price <= filter.HighCost && x.Price >= filter.LowCost);
+                filteredList = items.FindAll((x) => x.Price <= filter.HighCost && x.Price >= filter.LowCost);
             }
             else if (filter.HighCost > 0 && filter.LowCost == 0)
             {
-                filteredList = _items.FindAll(x => x.Price <= filter.HighCost);
+                filteredList = items.FindAll(x => x.Price <= filter.HighCost);
             }
             else if (filter.HighCost == 0 && filter.LowCost > 0)
             {
-                filteredList = _items.FindAll(x => x.Price >= filter.LowCost);
+                filteredList = items.FindAll(x => x.Price >= filter.LowCost);
             }
 
             return filteredList;
@@ -112,7 +114,7 @@ namespace PracticeRestService.Managers
                 cmd.ExecuteNonQuery();
                 dbLink.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return ex.Message;
             }
@@ -123,20 +125,46 @@ namespace PracticeRestService.Managers
 
         public String Put(Item updatedItem, int id)
         {
-            var oldItem = _items.First(x => x.Id == id);
-            oldItem.Name = updatedItem.Name;
-            oldItem.Quality = updatedItem.Quality;
-            oldItem.Price = updatedItem.Price;
+            try
+            {
+                const string sqlQuery = "UPDATE Items " +
+                                        "SET name = @Name, quality = @Quality, price = @Price " +
+                                        "WHERE Id = @ItemId";
+
+                using SqlConnection dbLink = new SqlConnection(ConnectionString);
+                using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
+                cmd.Parameters.AddWithValue("@ItemId", id);
+                cmd.Parameters.AddWithValue("@Name", updatedItem.Name);
+                cmd.Parameters.AddWithValue("@Quality", updatedItem.Quality);
+                cmd.Parameters.AddWithValue("@Price", updatedItem.Price);
+
+                dbLink.Open();
+                cmd.ExecuteNonQuery();
+                dbLink.Close();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
 
             return $"Updated item Nr. {id}";
         }
 
         public String Delete(int id)
         {
-            Item itemToDelete = GetOne(id);
-            _items.Remove(itemToDelete);
+            const string sqlQuery = "DELETE FROM Items WHERE Id = @ItemId";
 
-            return $"Deleted item: {itemToDelete}";
+            using (SqlConnection dbLink = new SqlConnection(ConnectionString))
+            {
+                using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
+                cmd.Parameters.AddWithValue("@ItemId", id);
+
+                dbLink.Open();
+                cmd.ExecuteNonQuery();
+                dbLink.Close();
+            }
+
+            return $"Deleted item: {id}";
         }
 
         private Item ReadNextItem(SqlDataReader reader)
