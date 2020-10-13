@@ -152,16 +152,21 @@ namespace PracticeRestService.Managers
 
         public String Delete(int id)
         {
-            const string sqlQuery = "DELETE FROM Items WHERE Id = @ItemId";
-
-            using (SqlConnection dbLink = new SqlConnection(ConnectionString))
+            try
             {
+                const string sqlQuery = "DELETE FROM Items WHERE Id = @ItemId";
+
+                using SqlConnection dbLink = new SqlConnection(ConnectionString);
                 using SqlCommand cmd = new SqlCommand(sqlQuery, dbLink);
                 cmd.Parameters.AddWithValue("@ItemId", id);
 
                 dbLink.Open();
                 cmd.ExecuteNonQuery();
                 dbLink.Close();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
             }
 
             return $"Deleted item: {id}";
